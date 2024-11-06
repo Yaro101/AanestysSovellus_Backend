@@ -1,0 +1,1 @@
+// We need to know what is the model of voting option and user / admin needed by the front end devs
