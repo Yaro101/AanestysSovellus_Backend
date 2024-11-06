@@ -2,7 +2,7 @@
 
 const express = require('express');
 const router = express.Router();
-const Option = require('../models/Option');
+const Poll = require('../models/Poll');
 
 
 // get kaikki options
