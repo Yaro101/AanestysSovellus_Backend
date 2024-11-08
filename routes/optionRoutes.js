@@ -5,11 +5,11 @@ const router = express.Router();
 const Poll = require('../models/Poll');
 
 
-// get kaikki options
+// get kaikki options 
 router.get('/', async (req, res) => {
     try {
-        const options = await Option.find();
-        res.json(options);
+        const polls = await Poll.find();
+        res.json(polls);
     } catch (error) {
         res.status(500).json({ message: error.message});
     }
@@ -18,8 +18,8 @@ router.get('/', async (req, res) => {
 // get yksittäinen option
 router.get('/:id', async (req, res) => {
     try {
-        const option = await Option.findById(req.params.id);
-        if (!option) return res.status(404).json({ message: 'Option not found'});
+        const Poll = await Poll.findById(req.params.id);
+        if (!option) return res.status(404).json({ message: 'Poll not found'});
         res.json(option);
     } catch (error) {
         res.status(500).json({message: error.message});
@@ -29,14 +29,14 @@ router.get('/:id', async (req, res) => {
 
 // luo optionin
 router.post('/', async (req, res) => {
-    const option = new Option({
+    const poll = new Poll({
         name: req.body.name,
         votes: req.body.votes
         });
 
     try {
-        const newOption = await option.save();
-        res.status(201).json(newOption);
+        const newPoll = await poll.save();
+        res.status(201).json(newPoll);
     } catch (error) {
         res.status(400).json({ message: error.message});
     }
@@ -45,14 +45,14 @@ router.post('/', async (req, res) => {
 // päivittää optionin
 router.put('/:id', async (req, res) => {
     try {
-        const option = await Option.findById(req.params.id);
-        if (!option) return res.status(404).json({ message: 'Option not found'});
+        const poll = await Poll.findById(req.params.id);
+        if (!poll) return res.status(404).json({ message: 'Poll not found'});
 
-        option.name = req.body.name || option.name;
-        option.votes = req.body.votes || option.votes;
+        poll.name = req.body.name || poll.name;
+        poll.votes = req.body.votes || poll.votes;
 
-        const updatedOption = await option.save();
-        res.json(updatedOption);
+        const updatedPoll = await poll.save();
+        res.json(updatedPoll);
     } catch (error) {
         res.status(500).json({ message: error.message});
     }
@@ -62,11 +62,11 @@ router.put('/:id', async (req, res) => {
 // poistaa optionin
 router.delete('/:id', async (req, res) => {
     try {
-        const option = await Option.findById(req.params.id);
-        if (!option) return res.status(404).json ({ message: 'Option not found'});
+        const poll = await Poll.findById(req.params.id);
+        if (!poll) return res.status(404).json ({ message: 'Option not found'});
 
-        await option.remove();
-        res.json({message: 'Option deleted'});
+        await poll.remove();
+        res.json({message: 'Poll deleted'});
     } catch (error) {
         res.status(500).json({ message: error.message});
     }
