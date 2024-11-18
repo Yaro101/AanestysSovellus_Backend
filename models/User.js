@@ -1,4 +1,4 @@
-// we can update the schema based on our need
+// we can update the schema (user model) based on our need
 
 const mongoose = require('mongoose');
 

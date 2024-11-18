@@ -1,4 +1,4 @@
-// We need to know what is the model of voting option and user / admin needed by the front end devs
+// We need to know what is the model of voting polls and user / admin needed by the front end devs
 
 const mongoose = require('mongoose');
 
@@ -8,3 +8,5 @@ const pollSchema = new mongoose.Schema({
 });
 
 module.exports = mongoose.model('Poll', pollSchema);
+
+// Both models for polls and user are for testing and replaceable with Tuomas models
