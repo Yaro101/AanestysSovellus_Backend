@@ -4,6 +4,8 @@
 
 // User data need to have role either admin or user so when logged if it is user he can vote and if it is admin he can add, remove or update voting options like Tuomas L added in the routes
 
+// jsonwebtoken for handling user authentication via JWTs
+
 const jwt = require('jsonwebtoken');
 
 exports.verifyToken = (req, res, next) => {
@@ -23,3 +25,6 @@ exports.isAdmin = (req, res, next) => {
     if (req.user.role !== 'admin') return res.status(403).json({ message: 'Access denied' });
     next();
 };
+
+
+// middlware for auth and role checking (admin/user)
