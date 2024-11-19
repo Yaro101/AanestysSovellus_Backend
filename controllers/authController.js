@@ -11,7 +11,19 @@ const jwt = require('jsonwebtoken');
 exports.register = async (req, res) => {
     const { username, password, role } = req.body;
 
+    // Check for no entry
+    if (!username || !password) {
+        return res.status(400).json({ message: 'Username and password are required' });
+    }
+
     try {
+        // Check if user already exist
+        const existingUser = await User.findOne({ username });
+        if (existingUser) {
+            return res.status(400).json({ message: 'User already exists, you cannot have multi accounts for voting' });
+        }
+
+        // Hash the password and create new user
         const hashedPassword = await bcrypt.hash(password, 10);
         const user = new User({ username, password: hashedPassword, role });
         await user.save();
@@ -37,3 +49,6 @@ exports.login = async (req, res) => {
         res.status(500).json({ message: 'Error logging in' });
     }
 };
+
+
+// 19.11.24: added checks -> empty username or password, existing user
