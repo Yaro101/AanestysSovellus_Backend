@@ -15,14 +15,18 @@
 // Admin remove a poll (and or an option to a poll)
 
 const Poll = require('../models/Poll');
+const { verifyToken, isAdmin } = require('../middlware/authMiddleware');
 const User = require('../models/User');
 
-// // luo uusi poll
+// // luo uusi poll (Admin only)
 exports.createPoll = async (req, res) => {
     try {
         const { question, options } = req.body;
-        const poll = new Poll({ question, options });
+        // Admin user is already verified through the 'isAdmin' middleware and then assigned to createdBy automatically
+        const createdBy = req.user.userId;
+        const poll = new Poll({ question, options, createdBy });
         await poll.save();
+        res.status(201).json({ message: 'Poll created successfully', poll: newPoll });
         res.status(201).json(poll);
     } catch (error) {
         res.status(500).json({ message: 'Error creating poll' });
@@ -39,37 +43,40 @@ exports.getPolls = async (req, res) => {
     }
 };
 
-// Vote on a poll
+// Vote on a poll (Logged in user)
 exports.voteOnPoll = async (req, res) => {
+    const { id } = req.params; // Getting the poll id from url
+    const { optionId } = req.body; // getiing the option id the user voted for
+    const userId = req.user.userId;  // Getting the logged in user's id from the token
     try {
-        const poll = await Poll.findById(req.params.id);
-        const user = await User.findById(req.user.userId);
+        const poll = await Poll.findById(id);
 
-        if (user.votedPolls.includes(poll._id)) {
-            return res.status(403).json({ message: 'User has already voted on this poll' });
+        if (!poll) {
+            return res.status(404).json({ message: 'Poll not found' })
+        };
+        // Check if user already voted
+        if (poll.votedBy.includes(userId)) {
+            return res.status(400).json({ message: 'You have already voted on this poll' });
         }
 
-        const { optionIndex } = req.body;
-        if (poll && poll.options[optionIndex]) {
-            poll.options[optionIndex].votes += 1;
-            user.votedPolls.push(poll._id);
+        // selecting the option and incrementing votes
+        const option = poll.options.id(optionId);
+        option.votes += 1;
+        poll.votedBy.push(userId);
 
-            await poll.save();
-            await user.save();
-            res.json({ message: 'Vote recorded' });
-        } else {
-            res.status(404).json({ message: 'Poll or option not found' });
-        }
+        await poll.save(); // saving the poll
+        res.status(200).json({ message: 'Vote recorded', poll });
+
     } catch (error) {
-        res.status(500).json({ message: 'Error voting on poll' });
+        res.status(500).json({ message: 'Error voting on poll', error: error.message });
     }
 };
 
 // päivittää poll
- exports.updatePoll = async (req, res) => {
+exports.updatePoll = async (req, res) => {
     try {
         const poll = await Poll.findById(req.params.id);
-        if (!poll) return res.status(404).json({ message: 'Poll not found'});
+        if (!poll) return res.status(404).json({ message: 'Poll not found' });
 
         poll.name = req.body.name || poll.name;
         poll.votes = req.body.votes || poll.votes;
@@ -77,7 +84,7 @@ exports.voteOnPoll = async (req, res) => {
         const updatedPoll = await poll.save();
         res.json(updatedPoll);
     } catch (error) {
-        res.status(500).json({ message: error.message});
+        res.status(500).json({ message: error.message });
     }
 };
 
@@ -109,12 +116,12 @@ exports.removeOption = async (req, res) => {
 exports.removePoll = async (req, res) => {
     try {
         const poll = await Poll.findById(req.params.id);
-        if (!poll) return res.status(404).json ({ message: 'Poll not found'});
+        if (!poll) return res.status(404).json({ message: 'Poll not found' });
 
         await poll.remove();
-        res.json({message: 'Poll deleted'});
+        res.json({ message: 'Poll deleted' });
     } catch (error) {
-        res.status(500).json({ message: error.message});
+        res.status(500).json({ message: error.message });
     }
 };
 
