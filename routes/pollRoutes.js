@@ -78,18 +78,29 @@
 
 
 const express = require('express');
-const { createPoll, getPolls, voteOnPoll, updatePoll, addOption, removeOption, removePoll, getResults } = require('../controllers/pollController');
+const {
+    createPoll,
+    getPolls,
+    voteOnPoll,
+    updatePoll,
+    addOption,
+    removeOption,
+    removePoll,
+    getResults
+} = require('../controllers/pollController');
+
 const { verifyToken, isAdmin } = require('../middlware/authMiddleware');
 const router = express.Router();
 
-router.post('/', verifyToken, isAdmin, createPoll);
-router.get('/', verifyToken, getPolls);
-router.post('/:id/vote', verifyToken, voteOnPoll);
-router.post('/:id/add-option', verifyToken, isAdmin, addOption);
-router.patch('/:id/update-poll', verifyToken, isAdmin, updatePoll);
-router.delete('/:id/remove-option', verifyToken, isAdmin, removeOption);
-router.delete('/:id/remove-poll', verifyToken, isAdmin, removePoll);
-router.get('/:id/results', verifyToken, isAdmin, getResults);
+// Routes are protected with verifyToken (and isAdmin where necessary)
+router.post('/', verifyToken, isAdmin, createPoll); // Only admins can create a poll
+router.get('/', verifyToken, getPolls); // All users can veiw the polls
+router.post('/:id/vote', verifyToken, voteOnPoll); // All users can vote on a poll
+router.post('/:id/add-option', verifyToken, isAdmin, addOption); // Only admins can add options
+router.patch('/:id/update-poll', verifyToken, isAdmin, updatePoll); // Only admins can update a poll
+router.delete('/:id/remove-option', verifyToken, isAdmin, removeOption); // Only admins can remove options
+router.delete('/:id/remove-poll', verifyToken, isAdmin, removePoll); // Only admins can remove a poll
+router.get('/:id/results', verifyToken, isAdmin, getResults); // Only admins can view results
 
 module.exports = router;
 
