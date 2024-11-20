@@ -25,3 +25,9 @@ to avoid git commiting .env.local --cached
 
 git rm .env --cached
 git commit -m "Any message"
+
+
+
+## Testing steps:
+
+
