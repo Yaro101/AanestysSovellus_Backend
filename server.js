@@ -2,6 +2,7 @@
 // cors to enable cross-origin resource sharing, allowing the frontend to communicate with the backend
 
 // dotenv for managing environment variables (MongoDB URI that include the db password, JWT secret)
+// 20.11.24: Yaro: can we change this part...
 
 const express = require('express');
 const connectDB = require('./config/db'); 
@@ -29,3 +30,4 @@ app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
 // 19.11.24: Testing routes and auths and if the role user/admin is working as it should
 // 19.11.24: Added functionalities to poll schema (created by, timestamp and datestamp and duplicate check for options)
 // 19.11.24: Added validation to prevent multiple votes to pollSchema, added increment and votedBy
+// !               ------->    Filename User.js line exmple not clear or bug or...
