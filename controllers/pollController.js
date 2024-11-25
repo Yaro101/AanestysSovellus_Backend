@@ -22,17 +22,23 @@ const User = require('../models/User');
 exports.createPoll = async (req, res) => {
     try {
         const { question, options } = req.body;
-        // Admin user is already verified through the 'isAdmin' middleware and then assigned to createdBy automatically
-        const createdBy = req.user.userId;
-        const poll = new Poll({ question, options, createdBy });
-        await poll.save();
-        res.status(201).json({ message: 'Poll created successfully', poll: newPoll });
-        res.status(201).json(poll);
+        const createdBy = req.user.id; 
+
+        // Validate input
+        if (!question || !options || !Array.isArray(options) || options.length === 0) {
+            return res.status(400).json({ message: 'Question and options are required' });
+        }
+
+        // Create a new poll
+        const newPoll = new Poll({ question, options, createdBy });
+        await newPoll.save();
+
+        res.status(201).json({ message: 'Poll added successfully', poll: newPoll });
     } catch (error) {
-        res.status(500).json({ message: 'Error creating poll' });
+        console.error('Error creating poll:', error);
+        res.status(500).json({ message: 'Server error', error: error.message });
     }
 };
-
 // get kaikki options 
 exports.getPolls = async (req, res) => {
     try {
@@ -142,3 +148,5 @@ exports.getResults = async (req, res) => {
 // migrated Tuomas pollControllers from pollRoutes to here
 
 // 16.11.24: Adding options needs debugging
+
+// 25.11.24 Added input validation for createPoll
