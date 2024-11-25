@@ -24,6 +24,8 @@ exports.createPoll = async (req, res) => {
         const { question, options } = req.body;
         const createdBy = req.user.id; 
 
+         // Admin user is already verified through the 'isAdmin' middleware and then assigned to createdBy automatically
+
         // Validate input
         if (!question || !options || !Array.isArray(options) || options.length === 0) {
             return res.status(400).json({ message: 'Question and options are required' });
