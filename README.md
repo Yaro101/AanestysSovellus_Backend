@@ -27,7 +27,53 @@ git rm .env --cached
 git commit -m "Any message"
 
 
+## Testing steps with Postman: 
 
-## Testing steps:
+Go to postman website or download the Postman agent from [here](https://www.postman.com/downloads/)
+
+Entering the website you should see an option to send a new api request, under the "Getting started" tab
+
+## Registering an user
+
+1. **Create a New Request**: Click on the "New" button and select "Request".
+
+2. **Name the Request**: Name it "Register user" or however you like.
+
+3. **Change the authorization type**: Make sure to change Auth type to "Bearer Token"
+
+4. **Select Method and URL**: Set the method to `POST` and the URL to `http://localhost:5000/api/auth/register`.
+
+5. **Set Headers**: Add a header with `Content-Type: application/json`.
+    
+6. **Set Body**: Select the "Body" tab, choose "raw" and set the type to `JSON`. Add the following JSON:
+
+Example:
+
+    {
+        "username": "user1",
+        "password": "testing"  
+    }
+
+If you want to register as an admin, simply add this:
+
+    {
+        "username": "user1",
+        "password": "testing",
+        "role": "admin"
+    }
+
+
+## Logging in
+
+1. **Change the URL**: Change the URL to `http://localhost:5000/api/auth/login`
+
+    And now login with the newly registered user
+
+       {
+        "username": "user1",
+        "password": "testing"  
+    }
+
+
 
 

@@ -28,10 +28,10 @@ exports.createPoll = async (req, res) => {
         await poll.save();
         res.status(201).json({ message: 'Poll created successfully', poll });
     } catch (error) {
-        res.status(500).json({ message: 'Error creating poll' });
+        console.error('Error creating poll:', error);
+        res.status(500).json({ message: 'Server error', error: error.message });
     }
 };
-
 // get kaikki options 
 exports.getPolls = async (req, res) => {
     try {
