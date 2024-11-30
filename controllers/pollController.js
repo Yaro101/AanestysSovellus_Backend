@@ -26,8 +26,7 @@ exports.createPoll = async (req, res) => {
         const createdBy = req.user.userId;
         const poll = new Poll({ question, options, createdBy });
         await poll.save();
-        res.status(201).json({ message: 'Poll created successfully', poll: newPoll });
-        res.status(201).json(poll);
+        res.status(201).json({ message: 'Poll created successfully', poll });
     } catch (error) {
         res.status(500).json({ message: 'Error creating poll' });
     }
@@ -48,9 +47,9 @@ exports.voteOnPoll = async (req, res) => {
     const { id } = req.params; // Getting the poll id from url
     const { optionId } = req.body; // getiing the option id the user voted for
     const userId = req.user.userId;  // Getting the logged in user's id from the token
+    
     try {
         const poll = await Poll.findById(id);
-
         if (!poll) {
             return res.status(404).json({ message: 'Poll not found' })
         };
@@ -142,3 +141,4 @@ exports.getResults = async (req, res) => {
 // migrated Tuomas pollControllers from pollRoutes to here
 
 // 16.11.24: Adding options needs debugging
+// 30.11.24: Bug fixed double res. sending in one request will always through an error
