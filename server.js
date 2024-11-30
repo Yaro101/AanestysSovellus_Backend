@@ -30,4 +30,3 @@ app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
 // 19.11.24: Testing routes and auths and if the role user/admin is working as it should
 // 19.11.24: Added functionalities to poll schema (created by, timestamp and datestamp and duplicate check for options)
 // 19.11.24: Added validation to prevent multiple votes to pollSchema, added increment and votedBy
-// !               ------->    Filename User.js line exmple not clear or bug or...
