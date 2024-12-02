@@ -65,7 +65,7 @@ If you want to register as an admin, simply add this:
 
 ## Logging in
 
-1. **Change the URL to: **`http://localhost:5000/api/auth/login`
+1. **Change the URL to:** `http://localhost:5000/api/auth/login`
 
     And now login with the newly registered user
 
@@ -83,7 +83,7 @@ If you want to register as an admin, simply add this:
 
 After logging in as an admin, follow these steps to create a poll
 
-1. **Change the URL to:**`http://localhost:5000/api/polls/` 
+1. **Change the URL to:** `http://localhost:5000/api/polls/` 
 
 2. Go to the **Authorization** tab and paste the token you were given after logging in.
 
