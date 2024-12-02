@@ -65,14 +65,46 @@ If you want to register as an admin, simply add this:
 
 ## Logging in
 
-1. **Change the URL**: Change the URL to `http://localhost:5000/api/auth/login`
+1. **Change the URL to: **`http://localhost:5000/api/auth/login`
 
     And now login with the newly registered user
 
-       {
+    {
+
         "username": "user1",
         "password": "testing"  
     }
+
+    After successfully loggin in, you will be given a token
+
+    (Keep in mind that tokens have a 1hour expiration, so if you get errors like invalid toke, it most likely means the token has expired )
+
+## Creating a poll (Admin Only)
+
+After logging in as an admin, follow these steps to create a poll
+
+1. **Change the URL to:**`http://localhost:5000/api/polls/` 
+
+2. Go to the **Authorization** tab and paste the token you were given after logging in.
+
+3. **Type in the poll**
+
+Example:
+
+   {
+    "question": "Whats your favoourite car brand?",
+    "options": [
+        { "name": "Toyota" },
+        { "name": "Audi" },
+        { "name": "Saab" }
+    ]
+    
+}
+
+
+
+
+
 
 
 

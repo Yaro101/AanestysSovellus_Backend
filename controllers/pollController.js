@@ -141,4 +141,5 @@ exports.getResults = async (req, res) => {
 // migrated Tuomas pollControllers from pollRoutes to here
 
 // 16.11.24: Adding options needs debugging
+
 // 30.11.24: Bug fixed double res. sending in one request will always through an error
