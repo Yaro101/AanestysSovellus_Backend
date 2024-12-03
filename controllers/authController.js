@@ -6,6 +6,7 @@
 const User = require('../models/User');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+const { isAdmin } = require('../middlware/authMiddleware');
 
 // Register a new user
 exports.register = async (req, res) => {
@@ -16,31 +17,24 @@ exports.register = async (req, res) => {
         return res.status(400).json({ message: 'Username and password are required' });
     }
 
-    // Validate the role field
-    const validRoles = ['user', 'admin'];
-    if (role && !validRoles.includes(role)) {
-        return res.status(400).json({ message: 'Invalid role provided' });
-    }
-
     try {
-        // Check if user already exists
+        // Check if user already exist
         const existingUser = await User.findOne({ username });
         if (existingUser) {
-            return res.status(400).json({ message: 'User already exists, you cannot have multiple accounts for voting' });
+            return res.status(400).json({ message: 'User already exists, you cannot have multi accounts for voting' });
         }
 
-        // Hash the password and create the user
+        // Hash the password and create new user
         const hashedPassword = await bcrypt.hash(password, 10);
+        // Extracting the user role for the response message
         const userRole = role || 'user'; // Default to 'user' if role is not provided
+        // Create new user
         const user = new User({ username, password: hashedPassword, role: userRole });
-
         await user.save();
-
-        // Return success message
-        const roleMessage = userRole === 'admin' ? 'Admin' : 'User';
-        res.status(201).json({ message: `${roleMessage} registered successfully` });
+        const roleMessage = userRole === 'admin' ? 'Admin' : 'User'; 
+        res.status(201).json({ message: `${roleMessage}registered successfully` });
     } catch (error) {
-        res.status(500).json({ message: 'Error registering user', error: error.message });
+        res.status(500).json({ message: 'Error registering user' });
     }
 };
 
@@ -49,21 +43,27 @@ exports.login = async (req, res) => {
     const { username, password } = req.body;
 
     if (!username || !password) {
-        return res.status(400).json({ message: 'Username and password are required' });
+        return res.status(400).json({ message: 'Username and password are required' })
     }
-
     try {
         const user = await User.findOne({ username });
-        if (user && (await bcrypt.compare(password, user.password))) {
-            const token = jwt.sign(
-                { userId: user._id, role: user.role },
-                process.env.JWT_SECRET,
-                { expiresIn: '1h' }
-            );
-            res.status(200).json({ message: 'Logged in successfully', token });
-        } else {
-            res.status(401).json({ message: 'Invalid credentials' });
+        if (!user) {
+            return res.status(400).json({ message: 'Invalid credentials' });
         }
+
+        // Check if password is correct
+        const isMatch = await bcrypt.compare(password, user.password);
+        if (!isMatch) {
+            return res.status(400).json({ message: 'Invalid credentials' });
+        }
+
+        const token = jwt.sign(
+            { id: user._id, role: user.role },
+            process.env.JWT_SECRET,
+            { expiresIn: '1h' }
+        );
+
+        res.status(200).json({ message: 'Login successful', token });
     } catch (error) {
         if (process.env.NODE_ENV !== 'production') {
             console.error('Error during user login:', error);
@@ -75,5 +75,9 @@ exports.login = async (req, res) => {
 
 // 19.11.24: added checks -> empty username or password, existing user
 // 20.11.24: Added dynamic roleName in response message
+
 // removed isAdmin middlware
 // Added check (catch) if not on production environment to prevent sensitive data from being logged
+
+// 03.12.24: Fixed bug in exports.login, where server was trying to send multiple responses for single requests. 
+// Added error handlers and return statements to exports.login, these return statements make sure that no further code is executed after the sending a response
