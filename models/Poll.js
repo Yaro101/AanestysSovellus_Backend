@@ -42,26 +42,29 @@ pollSchema.pre('save', function (next) {
     if (hasDuplicates) {
         return next(new Error('Poll options must be unique.'));
     }
+    if (optionNames.length < 2) {
+        return next(new Error('A poll must have at least 2 options'))
+    }
     next();
 });
 
 // Add validation to prevent multiple votes by the same user
 pollSchema.methods.vote = async function (userId, optionId) {
     if (this.votedBy.includes(userId)) {
-      throw new Error('User has already voted on this poll.');
+        throw new Error('User has already voted on this poll.');
     }
-  
+
     // Increment the votes for the chosen option
     const option = this.options.id(optionId);
     if (option) {
-      option.votes += 1;
-      this.votedBy.push(userId);  // Add user to votedBy array
-      await this.save();
+        option.votes += 1;
+        this.votedBy.push(userId);  // Add user to votedBy array
+        await this.save();
     } else {
-      throw new Error('Option not found');
+        throw new Error('Option not found');
     }
-  };
-  
+};
+
 module.exports = mongoose.model('Poll', pollSchema);
 
 
