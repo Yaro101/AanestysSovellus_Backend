@@ -69,10 +69,10 @@ If you want to register as an admin, simply add this:
 
     And now login with the newly registered user
 
-{
-  "username": "user1",
-  "password": "testing"  
-}
+    {
+        "username": "user1",
+        "password": "testing"  
+    }
 
     After successfully loggin in, you will be given a token
 
@@ -90,14 +90,14 @@ After logging in as an admin, follow these steps to create a poll
 
 Example:
 
-{ 
-  "question": "Whats your favoourite car brand?",
-  "options": [
+    { 
+        "question": "Whats your favoourite car brand?",
+        "options": [
         { "name": "Toyota" },
         { "name": "Audi" },
         { "name": "Saab" }
-   ]
-}
+        ]
+    }
 
 
 
