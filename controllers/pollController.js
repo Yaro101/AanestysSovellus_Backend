@@ -46,7 +46,7 @@ exports.getPolls = async (req, res) => {
 exports.voteOnPoll = async (req, res) => {
     const { id } = req.params; // Getting the poll id from url
     const { optionId } = req.body; // getiing the option id the user voted for
-    const userId = req.user.userId;  // Getting the logged in user's id from the token
+    const userId = req.user.id;  // Getting the logged in user's id from the token
     
     try {
         const poll = await Poll.findById(id);
@@ -60,8 +60,15 @@ exports.voteOnPoll = async (req, res) => {
 
         // selecting the option and incrementing votes
         const option = poll.options.id(optionId);
+        if (!option) {
+            return res.status(404).json({ message: 'Option not found' });
+        }
         option.votes += 1;
-        poll.votedBy.push(userId);
+
+        // make sure userId is valid before pushing it to the votedBy array
+        if (userId) {
+            poll.votedBy.push(userId);
+        }
 
         await poll.save(); // saving the poll
         res.status(200).json({ message: 'Vote recorded', poll });
