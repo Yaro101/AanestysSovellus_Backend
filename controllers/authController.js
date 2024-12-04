@@ -6,7 +6,7 @@
 const User = require('../models/User');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-const { isAdmin } = require('../middlware/authMiddleware');
+// const { isAdmin } = require('../middlware/authMiddleware');
 
 // Register a new user
 exports.register = async (req, res) => {
@@ -32,7 +32,7 @@ exports.register = async (req, res) => {
         const user = new User({ username, password: hashedPassword, role: userRole });
         await user.save();
         const roleMessage = userRole === 'admin' ? 'Admin' : 'User'; 
-        res.status(201).json({ message: `${roleMessage}registered successfully` });
+        res.status(201).json({ message: `${roleMessage} registered successfully` });
     } catch (error) {
         res.status(500).json({ message: 'Error registering user' });
     }
@@ -77,7 +77,7 @@ exports.login = async (req, res) => {
 // 20.11.24: Added dynamic roleName in response message
 
 // removed isAdmin middlware
-// Added check (catch) if not on production environment to prevent sensitive data from being logged
+// Added check (catch) if not on production environment to prevent sensitive data from being logged as error during login
 
 // 03.12.24: Fixed bug in exports.login, where server was trying to send multiple responses for single requests. 
 // Added error handlers and return statements to exports.login, these return statements make sure that no further code is executed after the sending a response
