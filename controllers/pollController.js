@@ -152,3 +152,5 @@ exports.getResults = async (req, res) => {
 // 30.11.24: Bug fixed double res. sending in one request will always through an error
 
 // 04.12.24: changed req.user.userId to req.user.id to fix validation error
+
+// 04.12.12 added a check that ensures userId is valid before pushing to votedBy
