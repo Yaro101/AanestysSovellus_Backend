@@ -91,12 +91,12 @@ After logging in as an admin, follow these steps to create a poll
 Example:
 
 { 
-    "question": "Whats your favoourite car brand?",
-    "options": [
+  "question": "Whats your favoourite car brand?",
+  "options": [
         { "name": "Toyota" },
         { "name": "Audi" },
         { "name": "Saab" }
-    ]
+   ]
 }
 
 
