@@ -23,7 +23,7 @@ exports.createPoll = async (req, res) => {
     try {
         const { question, options } = req.body;
         // Admin user is already verified through the 'isAdmin' middleware and then assigned to createdBy automatically
-        const createdBy = req.user.userId;
+        const createdBy = req.user.id;
         const poll = new Poll({ question, options, createdBy });
         await poll.save();
         res.status(201).json({ message: 'Poll created successfully', poll });
@@ -143,3 +143,5 @@ exports.getResults = async (req, res) => {
 // 16.11.24: Adding options needs debugging
 
 // 30.11.24: Bug fixed double res. sending in one request will always through an error
+
+// 04.12.24: changed req.user.userId to req.user.id to fix validation error
