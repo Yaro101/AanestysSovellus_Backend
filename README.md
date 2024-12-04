@@ -74,9 +74,11 @@ And now login with the newly registered user
         "password": "testing"  
     }
 ```
-    After successfully loggin in, you will be given a token
 
-    (Keep in mind that tokens have a 1hour expiration, so if you get errors like invalid token, it most likely means the token has expired )
+
+After successfully loggin in, you will be given a token
+
+(Keep in mind that tokens have a 1hour expiration, so if you get errors like invalid token, it most likely means the token has expired )
 
 ## Creating a poll (Admin Only)
 
@@ -142,9 +144,12 @@ After successfully creating a poll, your console should look like this:
 
 2. Type in the following if you want to vote Toyota, the first option
 
+```
 {
     "optionId": "optionId1"
 }   
+```
+
 
 After successfully voting, your console should look like this:
 ```
