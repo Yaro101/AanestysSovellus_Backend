@@ -67,13 +67,13 @@ If you want to register as an admin, simply add this:
 
 1. **Change the URL to:** `http://localhost:5000/api/auth/login`
 
-    And now login with the newly registered user
-
+And now login with the newly registered user
+```
    {
         "username": "user1",
         "password": "testing"  
     }
-
+```
     After successfully loggin in, you will be given a token
 
     (Keep in mind that tokens have a 1hour expiration, so if you get errors like invalid token, it most likely means the token has expired )
@@ -147,8 +147,8 @@ After successfully creating a poll, your console should look like this:
 }   
 
 After successfully voting, your console should look like this:
-
-{
+```
+    {
     "message": "Vote recorded",
     "poll": {
         "_id": "pollId",
@@ -179,13 +179,14 @@ After successfully voting, your console should look like this:
         "__v": 1
     }
 }
-
+```
 Voting again with the same user is not possible, resulting with this message if attempted:
 
+```
 {
     "message": "You have already voted on this poll"
 }
-
+```
     
 
 
