@@ -24,7 +24,7 @@ exports.verifyToken = (req, res, next) => {
         if (err) {
             return res.status(401).json({ message: 'Invalid token' });
         }
-        req.user = decoded;
+        req.user = decoded; // adding the decoded user info to the request
         next();
     });
 };
@@ -35,7 +35,7 @@ exports.isAdmin = async (req, res, next) => {
         if (user && user.role === 'admin') {
             next();
         } else {
-            res.status(403).json({ message: 'Require Admin Role' });
+            res.status(403).json({ message: 'Admin role is required' });
         }
     } catch (error) {
         res.status(500).json({ message: 'Server error', error: error.message });
