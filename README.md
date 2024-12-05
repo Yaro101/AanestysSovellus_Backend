@@ -49,19 +49,22 @@ Entering the website you should see an option to send a new api request, under t
 
 Example:
 
+```
     {
         "username": "user1",
         "password": "testing"  
     }
+```
 
 If you want to register as an admin, simply add this:
 
+```
     {
         "username": "user1",
         "password": "testing",
         "role": "admin"
     }
-
+```
 
 ## Logging in
 
@@ -69,11 +72,13 @@ If you want to register as an admin, simply add this:
 
     And now login with the newly registered user
 
+```
     {
 
         "username": "user1",
         "password": "testing"  
     }
+```
 
     After successfully loggin in, you will be given a token
 
@@ -91,6 +96,7 @@ After logging in as an admin, follow these steps to create a poll
 
 Example:
 
+```
    {
     
     "question": "Whats your favoourite car brand?",
@@ -101,9 +107,100 @@ Example:
     ]
 
    }
+```
 
+After successfully creating a poll, your console should look like this:
 
+(Keep in mind the ids shown here are just examples, in reality the ids are much longer)
 
+```
+{
+"message": "Poll created successfully",
+"poll": {
+    "question": "Whats your favoourite car brand?",
+    "options": [
+        {
+            "name": "Toyota",
+            "votes": 0,
+            "_id": "optionId1"
+        },
+        {
+            "name": "Audi",
+            "votes": 0,
+            "_id": "optionId2"
+        },
+        {
+            "name": "Saab",
+            "votes": 0,
+            "_id": "optionId3"
+        }
+    ],
+    "createdBy": "admins userId",
+    "votedBy": [],
+    "_id": "pollId",
+    "createdAt": "2024-12-04T21:54:48.397Z",
+    "updatedAt": "2024-12-04T21:54:48.397Z",
+    "__v": 0
+}
+}
+```
+
+## Voting on a poll (User only)
+(Make sure you have set the bearer token in the Authorization tab after logging in as an user)
+
+1. **Change the URL to:** http://localhost:5000/api/polls/pollId/vote
+
+2. Type in the following if you want to vote Toyota, the first option
+
+```
+{
+    "optionId": "optionId1"
+}   
+```
+
+After successfully voting, your console should look like this:
+
+```
+    {
+    "message": "Vote recorded",
+    "poll": {
+        "_id": "pollId",
+        "question": "Whats your favoourite car brand?",
+        "options": [
+            {
+                "name": "Toyota",
+                "votes": 1,
+                "_id": "optionId1"
+            },
+            {
+                "name": "Audi",
+                "votes": 0,
+                "_id": "optionId2"
+            },
+            {
+                "name": "Saab",
+                "votes": 0,
+                "_id": "optionId3"
+            }
+        ],
+        "createdBy": "admins userId",
+        "votedBy": [
+            "userId"
+        ],
+        "createdAt": "2024-12-04T09:35:13.988Z",
+        "updatedAt": "2024-12-04T21:42:32.772Z",
+        "__v": 1
+    }
+}
+```
+
+Voting again with the same user is not possible, resulting with this message if attempted:
+
+```
+{
+    "message": "You have already voted on this poll"
+}
+```
 
 
 
