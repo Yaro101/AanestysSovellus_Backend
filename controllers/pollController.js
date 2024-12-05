@@ -28,9 +28,8 @@ exports.createPoll = async (req, res) => {
 
     try {
         // Admin user is already verified through the 'isAdmin' middleware and then assigned to createdBy automatically
-        const createdBy = req.user.userId;
-        const formattedOptions = options.map(opt => ({ name: opt.name, votes: 0 }))
-        const poll = new Poll({ question, options: formattedOptions, createdBy });
+        const createdBy = req.user.id;
+        const poll = new Poll({ question, options, createdBy });
         await poll.save();
         res.status(201).json({ message: 'Poll created successfully', poll });
     } catch (error) {
@@ -54,8 +53,8 @@ exports.getPolls = async (req, res) => {
 exports.voteOnPoll = async (req, res) => {
     const { id } = req.params; // Getting the poll id from url
     const { optionId } = req.body; // getiing the option id the user voted for
-    const userId = req.user.userId;  // Getting the logged in user's id from the token
-
+    const userId = req.user.id;  // Getting the logged in user's id from the token
+    
     try {
         const poll = await Poll.findById(id);
         if (!poll) {
@@ -69,10 +68,14 @@ exports.voteOnPoll = async (req, res) => {
         // selecting the option and incrementing votes
         const option = poll.options.id(optionId);
         if (!option) {
-            return res.status(404).json({ message: 'Otion not found in poll' })
+            return res.status(404).json({ message: 'Option not found' });
         }
         option.votes += 1;
-        poll.votedBy.push(userId);
+
+        // make sure userId is valid before pushing it to the votedBy array
+        if (userId) {
+            poll.votedBy.push(userId);
+        }
 
         await poll.save(); // saving the poll
         res.status(200).json({ message: 'Vote recorded', poll });
@@ -165,3 +168,7 @@ exports.getResults = async (req, res) => {
 // 16.11.24: Adding options needs debugging
 
 // 30.11.24: Bug fixed double res. sending in one request will always through an error
+
+// 04.12.24: changed req.user.userId to req.user.id to fix validation error
+
+// 04.12.12 added a check that ensures userId is valid before pushing to votedBy
