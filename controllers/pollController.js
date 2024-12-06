@@ -54,7 +54,7 @@ exports.voteOnPoll = async (req, res) => {
     const { id } = req.params; // Getting the poll id from url
     const { optionId } = req.body; // getiing the option id the user voted for
     const userId = req.user.id;  // Getting the logged in user's id from the token
-    
+
     try {
         const poll = await Poll.findById(id);
         if (!poll) {
@@ -124,24 +124,24 @@ exports.addOption = async (req, res) => {
 };
 
 //  Admin: Remove an option from poll
- exports.removeOption = async (req, res) => {
+exports.removeOption = async (req, res) => {
     try {
         const poll = await Poll.findById(req.params.id);
-         poll.options.id(req.body.optionId).remove();
-         await poll.save();
-         res.json({ message: 'Option removed', poll });
-     } catch (error) {
-         res.status(500).json({ message: 'Error removing option' });
+        poll.options.id(req.body.optionId).remove();
+        await poll.save();
+        res.json({ message: 'Option removed', poll });
+    } catch (error) {
+        res.status(500).json({ message: 'Error removing option' });
     }
- };
+};
 
 // poistaa optionin (Admin)
 exports.removePoll = async (req, res) => {
     try {
-        const poll = await Poll.findById(req.params.id);
+        const poll = await Poll.findByIdAndDelete(req.params.id);
+        // const poll = await Poll.findByIdAndDelete(mongoose.Types.ObjectId(req.params.id));
         if (!poll) return res.status(404).json({ message: 'Poll not found' });
 
-        await poll.remove();
         res.json({ message: 'Poll deleted successfully' });
     } catch (error) {
         console.error('Error deleting poll', error)
@@ -172,3 +172,5 @@ exports.getResults = async (req, res) => {
 // 04.12.24: changed req.user.userId to req.user.id to fix validation error
 
 // 04.12.12 added a check that ensures userId is valid before pushing to votedBy
+
+// 06.11.24: replaced to findByIdAndDelete
