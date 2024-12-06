@@ -20,21 +20,22 @@ exports.register = async (req, res) => {
     try {
         // Check if user already exist
         const existingUser = await User.findOne({ username });
+        const userRole = role || 'user'; // Default to 'user' if role is not provided
+
         if (existingUser) {
-            return res.status(400).json({ message: 'User already exists, you cannot have multi accounts for voting' });
+            return res.status(400).json({ message: `${userRole === 'admin' ? 'Admin' : 'User'} already exists, you cannot have multi accounts for voting` });
         }
 
         // Hash the password and create new user
         const hashedPassword = await bcrypt.hash(password, 10);
         // Extracting the user role for the response message
-        const userRole = role || 'user'; // Default to 'user' if role is not provided
         // Create new user
         const user = new User({ username, password: hashedPassword, role: userRole });
         await user.save();
-        const roleMessage = userRole === 'admin' ? 'Admin' : 'User'; 
+        const roleMessage = userRole === 'admin' ? 'Admin' : 'User';
         res.status(201).json({ message: `${roleMessage} registered successfully` });
     } catch (error) {
-        res.status(500).json({ message: 'Error registering user' });
+        res.status(500).json({ message: 'Error registering user', error: error.message });
     }
 };
 
@@ -57,6 +58,12 @@ exports.login = async (req, res) => {
             return res.status(400).json({ message: 'Invalid credentials' });
         }
 
+        // Check if there is JWT_SECRET saved in .env
+        if (!process.env.JWT_SECRET) {
+            console.warn('JWT_SECRET is not defined. Pleae add it to your environment variables aka .env file')
+        }
+
+        // Getting the token and setting 1h expiry security
         const token = jwt.sign(
             { id: user._id, role: user.role },
             process.env.JWT_SECRET,
@@ -81,3 +88,6 @@ exports.login = async (req, res) => {
 
 // 03.12.24: Fixed bug in exports.login, where server was trying to send multiple responses for single requests. 
 // Added error handlers and return statements to exports.login, these return statements make sure that no further code is executed after the sending a response
+// 06.11.24: added log error message
+// 06.11.24: added JWT_SECRET warn to catch error due to non existing or badly formatted
+// 06.11.24: maybe we should change to 2h expiring time to token
