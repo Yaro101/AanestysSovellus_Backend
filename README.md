@@ -80,9 +80,11 @@ If you want to register as an admin, simply add this:
     }
 ```
 
-    After successfully loggin in, you will be given a token
 
-    (Keep in mind that tokens have a 1hour expiration, so if you get errors like invalid token, it most likely means the token has expired )
+After successfully loggin in, you will be given a token
+
+
+(Keep in mind that tokens have a 1hour expiration, so if you get errors like invalid token, it most likely means the token has expired )
 
 ## Creating a poll (Admin Only)
 
@@ -99,7 +101,7 @@ Example:
 ```
    {
     
-    "question": "Whats your favoourite car brand?",
+    "question": "Whats your favourite car brand?",
     "options": [
         { "name": "Toyota" },
         { "name": "Audi" },

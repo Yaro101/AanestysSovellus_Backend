@@ -123,17 +123,17 @@ exports.addOption = async (req, res) => {
     }
 };
 
-// // Admin: Remove an option from poll
-// exports.removeOption = async (req, res) => {
-//     try {
-//         const poll = await Poll.findById(req.params.id);
-//         poll.options.id(req.body.optionId).remove();
-//         await poll.save();
-//         res.json({ message: 'Option removed', poll });
-//     } catch (error) {
-//         res.status(500).json({ message: 'Error removing option' });
-//     }
-// };
+//  Admin: Remove an option from poll
+ exports.removeOption = async (req, res) => {
+    try {
+        const poll = await Poll.findById(req.params.id);
+         poll.options.id(req.body.optionId).remove();
+         await poll.save();
+         res.json({ message: 'Option removed', poll });
+     } catch (error) {
+         res.status(500).json({ message: 'Error removing option' });
+    }
+ };
 
 // poistaa optionin (Admin)
 exports.removePoll = async (req, res) => {
