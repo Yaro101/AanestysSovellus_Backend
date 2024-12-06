@@ -99,7 +99,7 @@ router.post('/:id/vote', verifyToken, voteOnPoll); // All users can vote on a po
 router.post('/:id/add-option', verifyToken, isAdmin, addOption); // Only admins can add options
 router.patch('/:id/update-poll', verifyToken, isAdmin, updatePoll); // Only admins can update a poll
 router.delete('/:id/remove-option', verifyToken, isAdmin, removeOption); // Only admins can remove options
-router.delete('/:id/remove-poll', verifyToken, isAdmin, removePoll); // Only admins can remove a poll
+router.delete('/:id', verifyToken, isAdmin, removePoll); // Only admins can remove a poll
 router.get('/:id/results', verifyToken, isAdmin, getResults); // Only admins can view results
 
 module.exports = router;
@@ -107,3 +107,7 @@ module.exports = router;
 
 // 18.11.24: Adapted to only routes and separated poll controllers to pollControllers.js
 // 18.11.24: Added routes for adding/removing options to poll and updating the poll with patch
+
+// 06.11.24: bug related to remove poll due to extra changed from "router.delete('/:id/remove-poll', verifyToken, isAdmin, removePoll)" to router.delete('/:id', verifyToken, isAdmin, removePoll);
+
+// 06.11.24: other routes need rework to remove the excess to avoid similar issue
