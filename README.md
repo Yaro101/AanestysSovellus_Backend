@@ -90,7 +90,7 @@ After successfully loggin in, you will be given a token
 
 After logging in as an admin, follow these steps to create a poll
 
-1. **Change the URL to:** `http://localhost:5000/api/polls/` 
+1. **Change the URL to:** POST `http://localhost:5000/api/polls/` 
 
 2. Go to the **Authorization** tab and paste the token you were given after logging in.
 
@@ -119,27 +119,27 @@ After successfully creating a poll, your console should look like this:
 {
 "message": "Poll created successfully",
 "poll": {
-    "question": "Whats your favoourite car brand?",
+    "question": "Whats your favourite car brand?",
     "options": [
         {
             "name": "Toyota",
             "votes": 0,
-            "_id": "optionId1"
+            "_id": "option:Id1"
         },
         {
             "name": "Audi",
             "votes": 0,
-            "_id": "optionId2"
+            "_id": "option:Id2"
         },
         {
             "name": "Saab",
             "votes": 0,
-            "_id": "optionId3"
+            "_id": "option:Id3"
         }
     ],
-    "createdBy": "admins userId",
+    "createdBy": "admins user:Id",
     "votedBy": [],
-    "_id": "pollId",
+    "_id": "poll:Id",
     "createdAt": "2024-12-04T21:54:48.397Z",
     "updatedAt": "2024-12-04T21:54:48.397Z",
     "__v": 0
@@ -150,7 +150,7 @@ After successfully creating a poll, your console should look like this:
 ## Voting on a poll (User only)
 (Make sure you have set the bearer token in the Authorization tab after logging in as an user)
 
-1. **Change the URL to:** http://localhost:5000/api/polls/pollId/vote
+1. **Change the URL to:** POST `http://localhost:5000/api/polls/pollId/vote`
 
 2. Type in the following if you want to vote Toyota, the first option
 
@@ -166,28 +166,28 @@ After successfully voting, your console should look like this:
     {
     "message": "Vote recorded",
     "poll": {
-        "_id": "pollId",
-        "question": "Whats your favoourite car brand?",
+        "_id": "poll:Id",
+        "question": "Whats your favourite car brand?",
         "options": [
             {
                 "name": "Toyota",
                 "votes": 1,
-                "_id": "optionId1"
+                "_id": "option:Id1"
             },
             {
                 "name": "Audi",
                 "votes": 0,
-                "_id": "optionId2"
+                "_id": "option:Id2"
             },
             {
                 "name": "Saab",
                 "votes": 0,
-                "_id": "optionId3"
+                "_id": "option:Id3"
             }
         ],
-        "createdBy": "admins userId",
+        "createdBy": "admins user:Id",
         "votedBy": [
-            "userId"
+            "user:Id"
         ],
         "createdAt": "2024-12-04T09:35:13.988Z",
         "updatedAt": "2024-12-04T21:42:32.772Z",
@@ -204,8 +204,22 @@ Voting again with the same user is not possible, resulting with this message if 
 }
 ```
 
+## Deleting a poll (Admin only)
+(Make sure you have set the bearer token in the Authorization tab after logging in as an admin)
 
+1. **Change the URL to:** DELETE `http://localhost:5000/api/polls/poll:Id/`
 
+After successfully deleting the poll, your console should look like this:
 
+```
+{
+    "message": "Poll deleted successfully"
+}
+```
 
+## Getting all polls 
+
+1. **Change the URL to:** Get `http://localhost:5000/api/polls/`
+
+The console should display all the polls.
 
