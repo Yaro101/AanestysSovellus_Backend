@@ -223,3 +223,9 @@ After successfully deleting the poll, your console should look like this:
 
 The console should display all the polls.
 
+## Getting a single poll by Id
+
+1. **Change the URL to:** Get `http://localhost:5000/api/polls/poll:id`
+
+The console should display a singular poll.
+
