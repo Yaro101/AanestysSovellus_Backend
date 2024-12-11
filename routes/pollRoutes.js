@@ -86,16 +86,18 @@ const {
     addOption,
     removeOption,
     removePoll,
-    getResults
+    getResults,
+    getPollById
 } = require('../controllers/pollController');
 
-const { verifyToken, isAdmin } = require('../middlware/authMiddleware');
+const { verifyToken, isAdmin, isUser } = require('../middlware/authMiddleware');
 const router = express.Router();
 
 // Routes are protected with verifyToken (and isAdmin where necessary)
 router.post('/', verifyToken, isAdmin, createPoll); // Only admins can create a poll
-router.get('/', verifyToken, getPolls); // All users can veiw the polls
-router.post('/:id/vote', verifyToken, voteOnPoll); // All users can vote on a poll
+router.get('/', verifyToken, getPolls); // All users can view the polls
+router.get('/:id', getPollById); // All users can view the poll
+router.post('/:id/vote', verifyToken, voteOnPoll, isUser); // All users can vote on a poll
 router.post('/:id/add-option', verifyToken, isAdmin, addOption); // Only admins can add options
 router.patch('/:id/update-poll', verifyToken, isAdmin, updatePoll); // Only admins can update a poll
 router.delete('/:id/remove-option', verifyToken, isAdmin, removeOption); // Only admins can remove options
@@ -111,3 +113,5 @@ module.exports = router;
 // 06.11.24: bug related to remove poll due to extra changed from "router.delete('/:id/remove-poll', verifyToken, isAdmin, removePoll)" to router.delete('/:id', verifyToken, isAdmin, removePoll);
 
 // 06.11.24: other routes need rework to remove the excess to avoid similar issue
+
+// 06.11.24: added getPollById to get a single poll by id

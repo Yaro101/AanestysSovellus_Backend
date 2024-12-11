@@ -70,7 +70,7 @@ exports.login = async (req, res) => {
             { expiresIn: '1h' }
         );
 
-        res.status(200).json({ message: 'Login successful', token });
+        res.status(200).json({ message: 'Login successful', token, role: user.role });
     } catch (error) {
         if (process.env.NODE_ENV !== 'production') {
             console.error('Error during user login:', error);
@@ -91,3 +91,5 @@ exports.login = async (req, res) => {
 // 06.11.24: added log error message
 // 06.11.24: added JWT_SECRET warn to catch error due to non existing or badly formatted
 // 06.11.24: maybe we should change to 2h expiring time to token
+
+// 11.12.24  Changed login endpoint to also return the role of the user

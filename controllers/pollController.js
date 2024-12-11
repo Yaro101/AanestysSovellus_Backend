@@ -159,6 +159,20 @@ exports.getResults = async (req, res) => {
     }
 };
 
+// Get poll by ID
+exports.getPollById = async (req, res) => {
+    try {
+        const poll = await Poll.findById(req.params.id);
+        if (!poll) {
+            return res.status(404).json({ message: 'Poll not found' });
+        }
+        res.json(poll);
+    } catch (error) {
+        console.error('Error fetching poll:', error);
+        res.status(500).json({ message: 'Server error', error: error.message });
+    }
+};
+
 
 
 // @ Tuomas we should move the controllers (create, remove, get...) to this file then export it tothe pollRoutes
@@ -174,3 +188,5 @@ exports.getResults = async (req, res) => {
 // 04.12.12 added a check that ensures userId is valid before pushing to votedBy
 
 // 06.11.24: replaced to findByIdAndDelete
+
+// 11.12.24 added getPollById endpoint

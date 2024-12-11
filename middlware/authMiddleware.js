@@ -42,5 +42,13 @@ exports.isAdmin = async (req, res, next) => {
     }
 };
 
+exports.isUser = (req, res, next) => {
+    if (req.user && req.user.role === 'user') {
+        next();
+    } else {
+        res.status(403).json({ message: 'User role is required' });
+    }
+};
+
 
 // middlware for auth and role checking (admin/user)
