@@ -1,6 +1,6 @@
 <img src="public/logo.png" align="right" width="300">
 
-## AanestysSovellus
+# AanestysSovellus
 
 run --> npm install express mongoose dotenv bcryptjs jsonwebtoken cors
 
@@ -12,14 +12,21 @@ run --> npm list
 
 node_modules folder and the list of dependencies should look like this:
 
-##    ├── bcryptjs@2.4.3
-##    ├── cors@2.8.5
-##    ├── dotenv@16.4.5
-##    ├── express@4.21.1
-##    ├── jsonwebtoken@9.0.2
-##    ├── mongodb@6.10.0
-##    ├── mongoose@8.8.1
-##    └── nodemon@3.1.7
+## ├── bcryptjs@2.4.3
+
+## ├── cors@2.8.5
+
+## ├── dotenv@16.4.5
+
+## ├── express@4.21.1
+
+## ├── jsonwebtoken@9.0.2
+
+## ├── mongodb@6.10.0
+
+## ├── mongoose@8.8.1
+
+## └── nodemon@3.1.7
 
 # ! Note:
 
@@ -28,8 +35,7 @@ to avoid git commiting .env.local --cached
 git rm .env --cached
 git commit -m "Any message"
 
-
-## Testing steps with Postman: 
+## Testing steps with Postman:
 
 Go to postman website or download the Postman agent from [here](https://www.postman.com/downloads/)
 
@@ -46,7 +52,6 @@ Entering the website you should see an option to send a new api request, under t
 4. **Select Method and URL**: Set the method to `POST` and the URL to `http://localhost:5000/api/auth/register`.
 
 5. **Set Headers**: Add a header with `Content-Type: application/json`.
-    
 6. **Set Body**: Select the "Body" tab, choose "raw" and set the type to `JSON`. Add the following JSON:
 
 Example:
@@ -54,7 +59,7 @@ Example:
 ```
     {
         "username": "user1",
-        "password": "testing"  
+        "password": "testing"
     }
 ```
 
@@ -72,19 +77,17 @@ If you want to register as an admin, simply add this:
 
 1. **Change the URL to:** `http://localhost:5000/api/auth/login`
 
-    And now login with the newly registered user
+   And now login with the newly registered user
 
 ```
     {
 
         "username": "user1",
-        "password": "testing"  
+        "password": "testing"
     }
 ```
 
-
 After successfully loggin in, you will be given a token
-
 
 (Keep in mind that tokens have a 1hour expiration, so if you get errors like invalid token, it most likely means the token has expired )
 
@@ -92,7 +95,7 @@ After successfully loggin in, you will be given a token
 
 After logging in as an admin, follow these steps to create a poll
 
-1. **Change the URL to:** POST `http://localhost:5000/api/polls/` 
+1. **Change the URL to:** POST `http://localhost:5000/api/polls/`
 
 2. Go to the **Authorization** tab and paste the token you were given after logging in.
 
@@ -102,7 +105,7 @@ Example:
 
 ```
    {
-    
+
     "question": "Whats your favourite car brand?",
     "options": [
         { "name": "Toyota" },
@@ -150,6 +153,7 @@ After successfully creating a poll, your console should look like this:
 ```
 
 ## Voting on a poll (User only)
+
 (Make sure you have set the bearer token in the Authorization tab after logging in as an user)
 
 1. **Change the URL to:** POST `http://localhost:5000/api/polls/pollId/vote`
@@ -159,7 +163,7 @@ After successfully creating a poll, your console should look like this:
 ```
 {
     "optionId": "optionId1"
-}   
+}
 ```
 
 After successfully voting, your console should look like this:
@@ -207,6 +211,7 @@ Voting again with the same user is not possible, resulting with this message if 
 ```
 
 ## Deleting a poll (Admin only)
+
 (Make sure you have set the bearer token in the Authorization tab after logging in as an admin)
 
 1. **Change the URL to:** DELETE `http://localhost:5000/api/polls/poll:Id/`
@@ -219,7 +224,7 @@ After successfully deleting the poll, your console should look like this:
 }
 ```
 
-## Getting all polls 
+## Getting all polls
 
 1. **Change the URL to:** Get `http://localhost:5000/api/polls/`
 
@@ -230,4 +235,3 @@ The console should display all the polls.
 1. **Change the URL to:** Get `http://localhost:5000/api/polls/poll:id`
 
 The console should display a singular poll.
-
