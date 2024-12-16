@@ -5,7 +5,7 @@
 // 20.11.24: Yaro: can we change this part...
 
 const express = require('express');
-const connectDB = require('./config/db'); 
+const connectDB = require('./config/db');
 const cors = require('cors');
 require('dotenv').config();
 
@@ -31,3 +31,4 @@ app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
 // 19.11.24: Added functionalities to poll schema (created by, timestamp and datestamp and duplicate check for options)
 // 19.11.24: Added validation to prevent multiple votes to pollSchema, added increment and votedBy
 // 25.11.24: Added input validation to createPoll
+// 16.12.24: Logo needs to be changed (adding Saveli)
