@@ -1,6 +1,8 @@
 <img src="public/logo.png" align="right" width="300">
+<br/>
 
 # AanestysSovellus
+
 <br/>
 run --> npm install express mongoose dotenv bcryptjs jsonwebtoken cors
 
