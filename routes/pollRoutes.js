@@ -95,7 +95,7 @@ const router = express.Router();
 
 // Routes are protected with verifyToken (and isAdmin where necessary)
 router.post('/', verifyToken, isAdmin, createPoll); // Only admins can create a poll
-router.get('/', verifyToken, getPolls); // All users can view the polls
+router.get('/', getPolls); // All users can view the polls
 router.get('/:id', getPollById); // All users can view the poll
 router.post('/:id/vote', verifyToken, voteOnPoll, isUser); // All users can vote on a poll
 router.post('/:id/add-option', verifyToken, isAdmin, addOption); // Only admins can add options
