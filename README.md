@@ -1,7 +1,237 @@
 <img src="public/logo.png" align="right" width="300">
 <br/>
 
-# AanestysSovellus
+## AanestysSovellus
+
+run --> npm install express mongoose dotenv bcryptjs jsonwebtoken cors
+
+npm start käynnistääksesi serveri tuotantotilassa.
+
+npm run dev käynnistääksesi serverin kehitystilassa automaattisen uudelleenkäynnistyksen kanssa.
+
+run --> npm list
+
+node_modules kansio ja dependencies lista pitäisi näyttää tältä:
+
+##    ├── bcryptjs@2.4.3
+##    ├── cors@2.8.5
+##    ├── dotenv@16.4.5
+##    ├── express@4.21.1
+##    ├── jsonwebtoken@9.0.2
+##    ├── mongodb@6.10.0
+##    ├── mongoose@8.8.1
+##    └── nodemon@3.1.7
+
+# ! Note:
+
+välttääksesi git commiting .env.local --cached
+
+git rm .env --cached
+git commit -m "Esimerkki viesti"
+
+
+## Testaus ohjeet Postmanilla: 
+
+Mene Postmanin nettisivulle tai lataa Postman agentti täältä [here](https://www.postman.com/downloads/)
+
+Siirtyessäsi nettisivulle sinun pitäisi nähdä valinta jolla voit lähettää uuden api Requestin "Getting started" napin kohdalla
+
+## Uuden käyttäjän rekisteröinti
+
+1. **Luo uusi Request**: Paina "New" napista ja valitse "Request".
+
+2. **Nimeä Request**: Nimeä pyynto "Rekisteröi käyttäjä" tai kuten haluat.
+
+3. **Muuta Authorization tyyppi*: Muista vaihtaa authorization tyyppi joka on "Bearer Token"
+
+4. **Valitse metodi ja URL**: aseta metodi: `POST` ja URL: `http://localhost:5000/api/auth/register`.
+
+5. **Aseta Headers**: Lisää header: `Content-Type: application/json`.
+    
+6. **Aseta Body**: Valitse "Body" välilehti, ja valitse "raw" ja aseta tyyppi: `JSON`. Lisää seuraava seuraava JSON:
+
+Esimerkki:
+
+```
+    {
+        "username": "user1",
+        "password": "testing"  
+    }
+```
+
+Jos haluat rekisteröidä adminina, lisää admin "rooli":
+
+```
+    {
+        "username": "user1",
+        "password": "testing",
+        "role": "admin"
+    }
+```
+
+## Sisäänkirjautuminen
+
+1. **Muuta URL:** `http://localhost:5000/api/auth/login`
+
+   Ja nyt kirjaudu sisään uudella rekisteröidyllä käyttäjälläsi
+
+```
+    {
+
+        "username": "user1",
+        "password": "testing"  
+    }
+```
+
+
+Onnistuneen sisäänkirjautumisen jälkeen, saat tokenin
+
+
+(Pidä mielessä että tokeneilla on 1 tunnin vanhenemisaika turvallisuussyistä, joten jos saat virheitä kuten invalid token, se todennäköisesti tarkoittaa että token on vanhentunut )
+
+## Äänestyksen luominen (Vain Adminille)
+
+Kirjauduttuasi sisään adminina, seuraa näitä ohjeita luodaksesi äänestyksen
+
+1. **Muuta URL:** POST `http://localhost:5000/api/polls/` 
+
+2. Mene **Authorization** välilehdelle ja liitä se tokeni joka sinulle annettiin kirjauduttuasi sisään.
+
+3. **Kirjotia äänestys**
+
+Esimerkki:
+
+```
+   {
+    
+    "question": "Whats your favourite car brand?",
+    "options": [
+        { "name": "Toyota" },
+        { "name": "Audi" },
+        { "name": "Saab" }
+    ]
+
+   }
+```
+
+Onnistuneesti luodessasi äänestyksen, konsolisi pitäisi näyttää tältä:
+
+(Muista että kaikki id:t jotka ovat näytillä ovat esimerkkejä, oikeasti ne ovat paljon pidempiä)
+
+```
+{
+"message": "Poll created successfully",
+"poll": {
+    "question": "Whats your favourite car brand?",
+    "options": [
+        {
+            "name": "Toyota",
+            "votes": 0,
+            "_id": "option:Id1"
+        },
+        {
+            "name": "Audi",
+            "votes": 0,
+            "_id": "option:Id2"
+        },
+        {
+            "name": "Saab",
+            "votes": 0,
+            "_id": "option:Id3"
+        }
+    ],
+    "createdBy": "admins user:Id",
+    "votedBy": [],
+    "_id": "poll:Id",
+    "createdAt": "2024-12-04T21:54:48.397Z",
+    "updatedAt": "2024-12-04T21:54:48.397Z",
+    "__v": 0
+}
+}
+```
+
+## Äänestäminen (Vain käyttäjille)
+
+(Muista että olet asettanut bearer tokenin Authorization välilehdessä samalla tavalla kirjauduttuasi sisään käyttäjänä)
+
+1. **Muuta URL:** POST `http://localhost:5000/api/polls/poll:Id/vote`
+
+2. Kirjoita seuraavasti jos haluat äänestää ensimmäistä vaihtoehtoa "Toyota"
+
+```
+{
+    "optionId": "option:Id1"
+}   
+```
+
+Äänestäessäsi onnistuneesti, konsolisi pitäisi näyttää tältä:
+
+```
+    {
+    "message": "Vote recorded",
+    "poll": {
+        "_id": "poll:Id",
+        "question": "Whats your favourite car brand?",
+        "options": [
+            {
+                "name": "Toyota",
+                "votes": 1,
+                "_id": "option:Id1"
+            },
+            {
+                "name": "Audi",
+                "votes": 0,
+                "_id": "option:Id2"
+            },
+            {
+                "name": "Saab",
+                "votes": 0,
+                "_id": "option:Id3"
+            }
+        ],
+        "createdBy": "admins user:Id",
+        "votedBy": [
+            "user:Id"
+        ],
+        "createdAt": "2024-12-04T09:35:13.988Z",
+        "updatedAt": "2024-12-04T21:42:32.772Z",
+        "__v": 1
+    }
+}
+```
+
+Äänestäminen uudestaan samalla käyttäjällä ei ole mahdollista, jonka tuloksena on tämä viesti jos yritetään:
+
+```
+{
+    "message": "You have already voted on this poll"
+}
+```
+
+## Äänestyksen poistaminen (Vain Adminille)
+
+(Muista että olet asettanut bearer tokenin Authorization välilehdessä samalla tavalla kirjauduttuasi sisään adminina)
+
+1. **Muuta URL:** DELETE `http://localhost:5000/api/polls/poll:Id/`
+
+Poistaessasi äänestyksen onnistuneesti, konsolisi pitäisi näyttää tältä:
+
+```
+{
+    "message": "Poll deleted successfully"
+}
+```
+
+## Äänestyksien hakeminen
+
+1. **Muuta URL:** Get `http://localhost:5000/api/polls/`
+
+Konsolin pitäisi näyttää kaikki äänestykset
+
+#######
+
+
+# Voting-app (English)
 
 <br/>
 run --> npm install express mongoose dotenv bcryptjs jsonwebtoken cors
